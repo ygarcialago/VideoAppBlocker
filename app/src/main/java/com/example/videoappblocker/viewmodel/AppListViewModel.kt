@@ -5,21 +5,37 @@ import android.content.pm.PackageManager
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.datastore.dataStore
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.videoappblocker.repository.dataStore
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.collections.emptySet
 
 class AppListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _apps = mutableStateOf<List<String>>(emptyList())
+    private val dataStore = application.dataStore
+    private val SELECTED_APPS_KEY = stringSetPreferencesKey("selected_apps")
+
     val apps: State<List<String>> = _apps
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
     private val _selectedApps = mutableStateOf<Set<String>>(emptySet())
     val selectedApps: State<Set<String>> = _selectedApps
+
+    fun loadSelections() {
+        viewModelScope.launch {
+            val saved = dataStore.data.first()[SELECTED_APPS_KEY] ?: emptySet()
+            _selectedApps.value = saved
+        }
+    }
 
     fun toggleAppSelection(appName: String) {
         _selectedApps.value =
@@ -28,6 +44,12 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
             } else {
                 _selectedApps.value + appName
             }
+
+        viewModelScope.launch {
+            dataStore.edit { prefs ->
+                prefs[SELECTED_APPS_KEY] = _selectedApps.value
+            }
+        }
     }
 
     fun getBlockedApps(): List<String> {
