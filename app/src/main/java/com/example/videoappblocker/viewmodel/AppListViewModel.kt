@@ -18,6 +18,22 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
+    private val _selectedApps = mutableStateOf<Set<String>>(emptySet())
+    val selectedApps: State<Set<String>> = _selectedApps
+
+    fun toggleAppSelection(appName: String) {
+        _selectedApps.value =
+            if (_selectedApps.value.contains(appName)) {
+                _selectedApps.value - appName
+            } else {
+                _selectedApps.value + appName
+            }
+    }
+
+    fun getBlockedApps(): List<String> {
+        return _selectedApps.value.toList()
+    }
+
     fun loadInstalledApps(onFinished: () -> Unit = {}) {
         if (_isLoading.value) return
 
