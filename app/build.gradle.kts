@@ -53,6 +53,10 @@ dependencies {
     implementation(libs.androidx.compose.foundation.layout)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
     implementation("androidx.navigation:navigation-compose:2.9.7")
+    // Source: https://mvnrepository.com/artifact/androidx.datastore/datastore-preferences
+    implementation("androidx.datastore:datastore-preferences:1.2.0")
+    // Source: https://mvnrepository.com/artifact/androidx.datastore/datastore-preferences-core
+    implementation("androidx.datastore:datastore-preferences-core:1.2.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
