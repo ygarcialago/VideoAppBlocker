@@ -41,13 +41,18 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
             _isLoading.value = true
 
             val result = withContext(Dispatchers.IO) {
-                val pm = getApplication<Application>().packageManager
+                val application = getApplication<Application>()
+                val pm = application.packageManager
                 val allApps = pm.getInstalledApplications(PackageManager.GET_META_DATA)
+                val myPackageName = application.packageName
+
 
                 Log.d("AppCheck", "Total: ${allApps.size}")
 
                 allApps.filter { appInfo ->
                     pm.getLaunchIntentForPackage(appInfo.packageName) != null
+                            &&
+                            appInfo.packageName != myPackageName
                 }.map { appInfo ->
                     pm.getApplicationLabel(appInfo).toString()
                 }.sortedBy { it.lowercase() }
