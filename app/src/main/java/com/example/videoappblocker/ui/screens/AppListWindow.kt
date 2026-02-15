@@ -44,13 +44,13 @@ fun AppListWindow(navController: NavController, viewModel: AppListViewModel) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = appName,
+                        text = appName.label,
                         modifier = Modifier.padding(vertical = 4.dp)
                     )
                     Checkbox(
-                        checked = selectedApps.contains(appName),
+                        checked = selectedApps.contains(appName.packageName),
                         onCheckedChange = {
-                            viewModel.toggleAppSelection(appName)
+                            viewModel.toggleAppSelection(appName.packageName)
                         }
                     )
                 }
