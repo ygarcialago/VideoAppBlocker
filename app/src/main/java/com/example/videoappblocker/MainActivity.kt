@@ -17,6 +17,7 @@ import com.example.videoappblocker.ui.screens.AppListWindow
 import com.example.videoappblocker.ui.screens.MainWindow
 import com.example.videoappblocker.ui.theme.VideoAppBlockerTheme
 import com.example.videoappblocker.viewmodel.AppListViewModel
+import com.example.videoappblocker.viewmodel.VideoSettingsViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
 
                 val navController = rememberNavController()
                 val viewModel: AppListViewModel = viewModel()
+                val videoViewModel: VideoSettingsViewModel = viewModel()
 
                 LaunchedEffect(Unit) {
                     viewModel.loadSelections()
@@ -43,7 +45,7 @@ class MainActivity : ComponentActivity() {
                     ) {
 
                         composable("main") {
-                            MainWindow(navController, viewModel)
+                            MainWindow(navController, viewModel, videoViewModel)
                         }
 
                         composable("app_list") {

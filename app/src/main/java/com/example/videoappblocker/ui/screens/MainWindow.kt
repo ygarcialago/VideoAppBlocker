@@ -19,9 +19,11 @@ import androidx.compose.ui.unit.dp
 import com.example.videoappblocker.viewmodel.AppListViewModel
 import androidx.navigation.NavController
 import com.example.videoappblocker.ui.components.TimerScreen
+import com.example.videoappblocker.ui.components.VideoChose
+import com.example.videoappblocker.viewmodel.VideoSettingsViewModel
 
 @Composable
-fun MainWindow(navController: NavController, viewModel: AppListViewModel) {
+fun MainWindow(navController: NavController, viewModel: AppListViewModel, videoViewModel: VideoSettingsViewModel) {
     val isLoading by viewModel.isLoading
 
     Column(
@@ -38,6 +40,7 @@ fun MainWindow(navController: NavController, viewModel: AppListViewModel) {
         )
 
         TimerScreen()
+        VideoChose(videoViewModel)
 
         Button(
             onClick = {
