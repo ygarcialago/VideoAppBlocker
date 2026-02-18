@@ -57,6 +57,10 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.2.0")
     // Source: https://mvnrepository.com/artifact/androidx.datastore/datastore-preferences-core
     implementation("androidx.datastore:datastore-preferences-core:1.2.0")
+    // Source: https://mvnrepository.com/artifact/androidx.media3/media3-exoplayer
+    implementation("androidx.media3:media3-exoplayer:1.9.2")
+    // Source: https://mvnrepository.com/artifact/androidx.media3/media3-ui
+    implementation("androidx.media3:media3-ui:1.9.2")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
