@@ -1,5 +1,6 @@
 package com.example.videoappblocker.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,7 +26,6 @@ import com.example.videoappblocker.viewmodel.TimerViewModel
 @Composable
 fun TimerScreen(viewModel: TimerViewModel = viewModel()) {
 
-    val timeLeft by viewModel.timeLeft
     val isRunning by viewModel.isRunning
 
     var hours by remember { mutableStateOf("") }
@@ -93,10 +94,22 @@ fun TimerScreen(viewModel: TimerViewModel = viewModel()) {
             }
 
             Button(
-                onClick = { viewModel.resetTimer() }
+                onClick = { viewModel.resetTimer() },
+                enabled = !(viewModel.strictMode.value && isRunning)
+
             ) {
                 Text("Stop")
             }
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            RadioButton(
+                selected = viewModel.strictMode.value,
+                onClick = { viewModel.strictMode.value = !viewModel.strictMode.value },
+                enabled = !isRunning
+            )
+            Text("Bloquear Stop")
         }
 
     }
