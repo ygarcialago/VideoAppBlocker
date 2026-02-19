@@ -4,11 +4,15 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.videoappblocker.viewmodel.VideoSettingsViewModel
 
@@ -41,7 +45,8 @@ fun VideoChose(viewModel: VideoSettingsViewModel) {
     }
 
 
-    Button(
+    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+        Button(
             onClick = {
                 videoPickerLauncher.launch(arrayOf("video/*"))
             }
@@ -49,6 +54,15 @@ fun VideoChose(viewModel: VideoSettingsViewModel) {
 
             Text(fileName ?: "Selecciona un vídeo")
         }
+        if (selectedVideoUri != null) {
+            Button(onClick = {
+                viewModel.clearSavedVideo()
+                }
+            ) {
+                Text("Limpiar selección")
+            }
+        }
+    }
 
 }
 
