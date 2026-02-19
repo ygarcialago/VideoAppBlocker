@@ -119,11 +119,7 @@ class AppBlockAccessibilityService : AccessibilityService() {
                 val params = WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.MATCH_PARENT,
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                    else
-                        WindowManager.LayoutParams.TYPE_PHONE,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN or
+                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                             WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                     PixelFormat.TRANSLUCENT
                 )
@@ -136,7 +132,7 @@ class AppBlockAccessibilityService : AccessibilityService() {
             } catch (e: Exception) {
                 Log.e("AppBlocker", "Error al abrir overlay: ${e.message}")
             }
-        }, 1000)
+        }, 200)
     }
 
 }
