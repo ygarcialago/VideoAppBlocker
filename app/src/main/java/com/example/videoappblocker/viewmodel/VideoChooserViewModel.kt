@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.videoappblocker.repository.dataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
 
 class VideoSettingsViewModel(application: Application) :
     AndroidViewModel(application) {
@@ -40,7 +41,7 @@ class VideoSettingsViewModel(application: Application) :
                 dataStore.data.first()[SELECTED_VIDEO_KEY]
 
             _selectedVideoUri.value =
-                savedUriString?.let { Uri.parse(it) }
+                savedUriString?.toUri()
         }
     }
 
