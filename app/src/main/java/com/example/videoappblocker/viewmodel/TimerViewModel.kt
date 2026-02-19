@@ -7,11 +7,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 class TimerViewModel : ViewModel() {
 
     private val _timeLeft = mutableStateOf(0)
-    val timeLeft: State<Int> = _timeLeft
+    var strictMode = mutableStateOf(false)
 
     private val _isRunning = mutableStateOf(false)
     val isRunning: State<Boolean> = _isRunning
