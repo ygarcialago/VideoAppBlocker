@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Cuerpo del teléfono -->
+    <path
+        android:fillColor="#222222"
+        android:pathData="M34,16
+                          h40
+                          a6,6 0 0 1 6,6
+                          v68
+                          a6,6 0 0 1 -6,6
+                          h-40
+                          a6,6 0 0 1 -6,-6
+                          v-68
+                          a6,6 0 0 1 6,-6z"/>
+
+    <!-- Pantalla -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M40,26 h28 v56 h-28z"/>
+
+    <!-- Botón inferior (círculo convertido a path) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,87
+                          a3,3 0 1,0 0,6
+                          a3,3 0 1,0 0,-6"/>
+
+    <!-- Línea roja -->
+    <path
+        android:strokeColor="#FF0000"
+        android:strokeWidth="8"
+        android:strokeLineCap="round"
+        android:pathData="M24,24 L84,84"/>
+</vector>
