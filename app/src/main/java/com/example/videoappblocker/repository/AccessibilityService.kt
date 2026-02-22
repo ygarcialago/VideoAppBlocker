@@ -132,7 +132,7 @@ class AppBlockAccessibilityService : AccessibilityService() {
             } catch (e: Exception) {
                 Log.e("AppBlocker", "Error al abrir overlay: ${e.message}")
             }
-        }, 200)
+        }, 0)
     }
 
 }
