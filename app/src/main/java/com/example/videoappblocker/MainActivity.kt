@@ -14,46 +14,24 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.videoappblocker.ui.screens.AppListWindow
+import com.example.videoappblocker.ui.screens.MainContent
 import com.example.videoappblocker.ui.screens.MainWindow
 import com.example.videoappblocker.ui.theme.VideoAppBlockerTheme
 import com.example.videoappblocker.viewmodel.AppListViewModel
 import com.example.videoappblocker.viewmodel.VideoSettingsViewModel
 
 class MainActivity : ComponentActivity() {
+
+    override fun onResume() {
+        super.onResume()
+        setContent { MainContent() }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            VideoAppBlockerTheme {
-
-                val navController = rememberNavController()
-                val viewModel: AppListViewModel = viewModel()
-                val videoViewModel: VideoSettingsViewModel = viewModel()
-
-                LaunchedEffect(Unit) {
-                    viewModel.loadSelections()
-                }
-
-                Scaffold(
-                    modifier = Modifier.fillMaxSize()
-                ) { innerPadding ->
-
-                    NavHost(
-                        navController = navController,
-                        startDestination = "main",
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-
-                        composable("main") {
-                            MainWindow(navController, viewModel, videoViewModel)
-                        }
-
-                        composable("app_list") {
-                            AppListWindow(navController, viewModel)
-                        }
-                    }
-                }
-            }
+            MainContent()
         }
     }
 }
