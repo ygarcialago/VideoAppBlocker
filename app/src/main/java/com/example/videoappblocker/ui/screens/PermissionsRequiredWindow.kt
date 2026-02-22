@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +32,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.example.videoappblocker.utils.canDrawOverlays
 import com.example.videoappblocker.utils.isAccessibilityServiceEnabled
@@ -46,11 +51,24 @@ fun PermissionOnboardingScreen(navController: NavController) {
     var hasAccessibility by remember { mutableStateOf(false) }
     var hasOverlay by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        hasAccessibility = isAccessibilityServiceEnabled(context)
-        hasOverlay = Settings.canDrawOverlays(context)
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                hasAccessibility = isAccessibilityServiceEnabled(context)
+                hasOverlay = Settings.canDrawOverlays(context)
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 
+    // Navega a "main" si ambos permisos están concedidos
     LaunchedEffect(hasAccessibility, hasOverlay) {
         if (hasAccessibility && hasOverlay) {
             navController.navigate("main") {
@@ -99,9 +117,9 @@ fun PermissionOnboardingScreen(navController: NavController) {
         }
     }
 }
+
 @Composable
 fun AccessibilityPermissionPage() {
-
     val context = LocalContext.current
 
     Column(
@@ -109,26 +127,25 @@ fun AccessibilityPermissionPage() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Text("Activa el permiso de Accesibilidad")
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {
-                context.startActivity(
-                    Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                )
+                context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
             },
             enabled = !isAccessibilityServiceEnabled(context)
         ) {
-            Text(text = if(!isAccessibilityServiceEnabled(context)) "Conceder permiso" else "Permiso concedido")        }
+            Text(
+                text = if (!isAccessibilityServiceEnabled(context)) "Conceder permiso" else "Permiso concedido"
+            )
+        }
     }
 }
 
 @Composable
 fun OverlayPermissionPage() {
-
     val context = LocalContext.current
 
     Column(
@@ -136,7 +153,6 @@ fun OverlayPermissionPage() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Text("Permitir mostrar sobre otras apps")
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -151,6 +167,9 @@ fun OverlayPermissionPage() {
             },
             enabled = !canDrawOverlays(context)
         ) {
-            Text(text = if(!canDrawOverlays(context)) "Conceder permiso" else "Permiso concedido")        }
+            Text(
+                text = if (!canDrawOverlays(context)) "Conceder permiso" else "Permiso concedido"
+            )
+        }
     }
 }
