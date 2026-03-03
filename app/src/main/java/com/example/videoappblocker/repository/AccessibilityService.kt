@@ -71,68 +71,68 @@ class AppBlockAccessibilityService : AccessibilityService() {
 
         performGlobalAction(GLOBAL_ACTION_HOME)
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            try {
-                // Obtener WindowManager
-                val wm = getSystemService(WINDOW_SERVICE) as WindowManager
+        Handler(Looper.getMainLooper()).post {
+            CoroutineScope(Dispatchers.Main).launch {
 
-                // Crear PlayerView
-                val playerView = PlayerView(this).apply {
-                    layoutParams = ViewGroup.LayoutParams(
-                        WindowManager.LayoutParams.MATCH_PARENT,
-                        WindowManager.LayoutParams.MATCH_PARENT
-                    )
-                    useController = false
-                    resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
-                }
+                val prefs = applicationContext.dataStore.data.first()
+                val uriString = prefs[stringPreferencesKey("selected_video_uri")]
 
-                // Crear ExoPlayer
-                val player = ExoPlayer.Builder(this).build()
-                playerView.player = player
+                // 🔥 SOLO si hay URI guardada
+                if (!uriString.isNullOrEmpty()) {
 
-                // Cargar video
-                CoroutineScope(Dispatchers.Main).launch {
-                    val prefs = applicationContext.dataStore.data.first()
-                    val uriString = prefs[stringPreferencesKey("selected_video_uri")]
-                    uriString?.let {
-                        val mediaItem = MediaItem.fromUri(it.toUri())
+                    try {
+                        val wm = getSystemService(WINDOW_SERVICE) as WindowManager
+
+                        val playerView = PlayerView(this@AppBlockAccessibilityService).apply {
+                            layoutParams = ViewGroup.LayoutParams(
+                                WindowManager.LayoutParams.MATCH_PARENT,
+                                WindowManager.LayoutParams.MATCH_PARENT
+                            )
+                            useController = false
+                            resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
+                        }
+
+                        val player = ExoPlayer.Builder(this@AppBlockAccessibilityService).build()
+                        playerView.player = player
+
+                        val mediaItem = MediaItem.fromUri(uriString.toUri())
                         player.setMediaItem(mediaItem)
                         player.prepare()
                         player.playWhenReady = true
-                        player.repeatMode = ExoPlayer.REPEAT_MODE_OFF // solo una vez
-                    }
-                }
+                        player.repeatMode = ExoPlayer.REPEAT_MODE_OFF
 
-                // Listener para quitar overlay al terminar
-                player.addListener(object : androidx.media3.common.Player.Listener {
-                    override fun onPlaybackStateChanged(playbackState: Int) {
-                        if (playbackState == androidx.media3.common.Player.STATE_ENDED) {
-                            wm.removeView(playerView)
-                            player.release()
-                            overlayAdded = false
-                            Log.d("AppBlocker", "Video finalizado, overlay eliminado")
-                        }
-                    }
-                })
+                        player.addListener(object : androidx.media3.common.Player.Listener {
+                            override fun onPlaybackStateChanged(playbackState: Int) {
+                                if (playbackState == androidx.media3.common.Player.STATE_ENDED) {
+                                    wm.removeView(playerView)
+                                    player.release()
+                                    overlayAdded = false
+                                    Log.d("AppBlocker", "Video finalizado, overlay eliminado")
+                                }
+                            }
+                        })
 
-                // Configurar overlay fullscreen
-                val params = WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                        val params = WindowManager.LayoutParams(
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                             WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
-                    PixelFormat.TRANSLUCENT
-                )
+                            PixelFormat.TRANSLUCENT
+                        )
 
-                wm.addView(playerView, params)
-                overlayAdded = true
+                        wm.addView(playerView, params)
+                        overlayAdded = true
 
-                Log.d("AppBlocker", "Overlay del reproductor añadido sobre Home")
+                        Log.d("AppBlocker", "Overlay del reproductor añadido sobre Home")
 
-            } catch (e: Exception) {
-                Log.e("AppBlocker", "Error al abrir overlay: ${e.message}")
+                    } catch (e: Exception) {
+                        Log.e("AppBlocker", "Error al abrir overlay: ${e.message}")
+                    }
+
+                } else {
+                    Log.d("AppBlocker", "No hay URI guardada, no se muestra overlay")
+                }
             }
-        }, 0)
+        }
     }
-
 }
