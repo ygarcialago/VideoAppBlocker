@@ -51,7 +51,7 @@ fun MainWindow(navController: NavController, viewModel: AppListViewModel, videoV
                     navController.navigate("app_list")
                 }
             },
-            enabled = !isLoading || !timerViewModel.isRunning.value,
+            enabled = !isLoading && !timerViewModel.isRunning.value,
             modifier = Modifier.fillMaxWidth().height(50.dp)
         ) {
             if (isLoading) {
