@@ -16,14 +16,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.videoappblocker.viewmodel.AppListViewModel
 import androidx.navigation.NavController
 import com.example.videoappblocker.ui.components.TimerScreen
 import com.example.videoappblocker.ui.components.VideoChose
+import com.example.videoappblocker.viewmodel.TimerViewModel
 import com.example.videoappblocker.viewmodel.VideoSettingsViewModel
 
 @Composable
-fun MainWindow(navController: NavController, viewModel: AppListViewModel, videoViewModel: VideoSettingsViewModel) {
+fun MainWindow(navController: NavController, viewModel: AppListViewModel, videoViewModel: VideoSettingsViewModel, timerViewModel: TimerViewModel = viewModel()
+) {
     val isLoading by viewModel.isLoading
 
     Column(
@@ -39,7 +42,7 @@ fun MainWindow(navController: NavController, viewModel: AppListViewModel, videoV
             style = MaterialTheme.typography.headlineLarge
         )
 
-        TimerScreen()
+        TimerScreen(timerViewModel)
         VideoChose(videoViewModel)
 
         Button(
@@ -48,13 +51,13 @@ fun MainWindow(navController: NavController, viewModel: AppListViewModel, videoV
                     navController.navigate("app_list")
                 }
             },
-            enabled = !isLoading,
+            enabled = !isLoading || !timerViewModel.isRunning.value,
             modifier = Modifier.fillMaxWidth().height(50.dp)
         ) {
             if (isLoading) {
                 CircularProgressIndicator()
             } else {
-                Text("Modificar lista")
+                Text(if (timerViewModel.isRunning.value) "Timer activo" else "Modificar lista")
             }
         }
 

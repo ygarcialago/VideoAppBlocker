@@ -24,7 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.videoappblocker.viewmodel.TimerViewModel
 
 @Composable
-fun TimerScreen(viewModel: TimerViewModel = viewModel()) {
+fun TimerScreen(viewModel: TimerViewModel) {
 
     val isRunning by viewModel.isRunning
 
