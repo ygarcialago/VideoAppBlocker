@@ -1,6 +1,7 @@
 package com.example.videoappblocker.ui.screens
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,8 +40,11 @@ fun AppListWindow(navController: NavController, viewModel: AppListViewModel) {
             items(apps) { appName ->
                 Row(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(all = 8.dp),
+                        .fillMaxWidth()
+                        .padding(all = 8.dp)
+                        .clickable {
+                            viewModel.toggleAppSelection(appName.packageName)
+                        },
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
