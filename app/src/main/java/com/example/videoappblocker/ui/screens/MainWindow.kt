@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.videoappblocker.viewmodel.AppListViewModel
 import androidx.navigation.NavController
+import com.example.videoappblocker.ui.components.DismissKeyboardArea
 import com.example.videoappblocker.ui.components.TimerScreen
 import com.example.videoappblocker.ui.components.VideoChose
 import com.example.videoappblocker.viewmodel.TimerViewModel
@@ -29,37 +30,39 @@ fun MainWindow(navController: NavController, viewModel: AppListViewModel, videoV
 ) {
     val isLoading by viewModel.isLoading
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Text(
-            text = "VideoAppBlocker",
-            style = MaterialTheme.typography.headlineLarge
-        )
-
-        TimerScreen(timerViewModel)
-        VideoChose(videoViewModel)
-
-        Button(
-            onClick = {
-                viewModel.loadInstalledApps {
-                    navController.navigate("app_list")
-                }
-            },
-            enabled = !isLoading && !timerViewModel.isRunning.value,
-            modifier = Modifier.fillMaxWidth().height(50.dp)
+    DismissKeyboardArea() {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (isLoading) {
-                CircularProgressIndicator()
-            } else {
-                Text(if (timerViewModel.isRunning.value) "Timer activo" else "Modificar lista")
-            }
-        }
 
+            Text(
+                text = "VideoAppBlocker",
+                style = MaterialTheme.typography.headlineLarge
+            )
+
+            TimerScreen(timerViewModel)
+            VideoChose(videoViewModel)
+
+            Button(
+                onClick = {
+                    viewModel.loadInstalledApps {
+                        navController.navigate("app_list")
+                    }
+                },
+                enabled = !isLoading && !timerViewModel.isRunning.value,
+                modifier = Modifier.fillMaxWidth().height(50.dp)
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    Text(if (timerViewModel.isRunning.value) "Timer activo" else "Modificar lista")
+                }
+            }
+
+        }
     }
 }
