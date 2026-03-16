@@ -1,4 +1,4 @@
-package com.example.videoappblocker.repository
+package com.example.videoappblocker.data.repository
 
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore

@@ -1,21 +1,22 @@
-package com.example.videoappblocker.repository
+package com.example.videoappblocker.data.repository
 
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
 import androidx.media3.ui.AspectRatioFrameLayout
 import android.view.accessibility.AccessibilityEvent
 import android.graphics.PixelFormat
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.annotation.OptIn
 import androidx.core.net.toUri
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.*
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
@@ -65,7 +66,7 @@ class AppBlockAccessibilityService : AccessibilityService() {
 
     private var overlayAdded = false
 
-    @androidx.annotation.OptIn(UnstableApi::class)
+    @OptIn(UnstableApi::class)
     private fun goToHome() {
         if (overlayAdded) return
 
@@ -101,9 +102,9 @@ class AppBlockAccessibilityService : AccessibilityService() {
                         player.playWhenReady = true
                         player.repeatMode = ExoPlayer.REPEAT_MODE_OFF
 
-                        player.addListener(object : androidx.media3.common.Player.Listener {
+                        player.addListener(object : Player.Listener {
                             override fun onPlaybackStateChanged(playbackState: Int) {
-                                if (playbackState == androidx.media3.common.Player.STATE_ENDED) {
+                                if (playbackState == Player.STATE_ENDED) {
                                     wm.removeView(playerView)
                                     player.release()
                                     overlayAdded = false
