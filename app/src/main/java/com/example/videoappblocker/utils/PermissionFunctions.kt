@@ -3,7 +3,7 @@ package com.example.videoappblocker.utils
 import android.content.ComponentName
 import android.content.Context
 import android.provider.Settings
-import com.example.videoappblocker.repository.AppBlockAccessibilityService
+import com.example.videoappblocker.data.repository.AppBlockAccessibilityService
 
 fun isAccessibilityServiceEnabled(context: Context): Boolean {
     val expectedComponentName = ComponentName(

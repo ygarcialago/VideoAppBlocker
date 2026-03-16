@@ -19,7 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.videoappblocker.repository.dataStore
+import com.example.videoappblocker.data.repository.dataStore
 import com.example.videoappblocker.ui.theme.VideoAppBlockerTheme
 import com.example.videoappblocker.utils.canDrawOverlays
 import com.example.videoappblocker.utils.isAccessibilityServiceEnabled

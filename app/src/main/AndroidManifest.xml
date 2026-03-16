@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".repository.AppBlockAccessibilityService"
+            android:name=".data.repository.AppBlockAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:exported="false">
 

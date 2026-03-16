@@ -2,6 +2,7 @@ package com.example.videoappblocker.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -47,20 +48,33 @@ fun MainWindow(navController: NavController, viewModel: AppListViewModel, videoV
             TimerScreen(timerViewModel)
             VideoChose(videoViewModel)
 
-            Button(
-                onClick = {
-                    viewModel.loadInstalledApps {
-                        navController.navigate("app_list")
+            Column() {
+                Button(
+                    onClick = {
+                        viewModel.loadInstalledApps {
+                            navController.navigate("app_list")
+                        }
+                    },
+                    enabled = !isLoading && !timerViewModel.isRunning.value,
+                    modifier = Modifier.fillMaxWidth().height(50.dp)
+                ) {
+                    if (isLoading) {
+                        CircularProgressIndicator()
+                    } else {
+                        Text(if (timerViewModel.isRunning.value) "Timer activo" else "Modificar lista")
                     }
-                },
-                enabled = !isLoading && !timerViewModel.isRunning.value,
-                modifier = Modifier.fillMaxWidth().height(50.dp)
-            ) {
-                if (isLoading) {
-                    CircularProgressIndicator()
-                } else {
-                    Text(if (timerViewModel.isRunning.value) "Timer activo" else "Modificar lista")
                 }
+                Spacer(modifier = Modifier.height(12.dp))
+                Button(
+                    onClick = {
+
+                    },
+                    enabled = !isLoading && !timerViewModel.isRunning.value,
+                    modifier = Modifier.fillMaxWidth().height(50.dp)
+                ) {
+                    Text("Ver dashboard")
+                }
+
             }
 
         }
